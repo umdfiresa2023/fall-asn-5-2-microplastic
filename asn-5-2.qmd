@@ -13,54 +13,63 @@ Instructions: Run the script below to download and declare the required packages
 
 ```{r}
 #| message: false
-#install.packages("tidyverse")
+install.packages("tidyverse")
 library("tidyverse")
 ```
 
 Instructions: Upload your team's final dataframe into Posit Cloud. Use the read.csv function to upload the dataframe into the Posit Cloud Environment.
 
 ```{r}
-
+finaldf<-read.csv("finaldf.csv")
 ```
 
 **Question 1: Which variable indicates the treatment *group*? If your dataset does not have one yet, please create it using the mutate and ifelse function (2 points)**
 
-Answer:
+Answer: Treatment - Harford County
+
+```{r}
+df<-finaldf %>%
+  mutate(harford = ifelse(name == "Harford County", 1, 0))
+```
 
 **Question 2: Which variable indicates the treatment *period?* If your dataset does not have one yet, please create it using the mutate and ifelse function (2 points)**
 
-Answer:
+Answer: September 19 2010, September 19, 2023
+
+```{r}
+
+```
 
 **Question 3: Run a DiD regression with the treatment group** $d_i$**, treatment period** $t$**, and its interaction** $d_{it} \times t$ **to estimate their impact on the outcome variable. This regression can be represent by the equation** $Y_{it}=\beta_0+\beta_1 d_i+\beta_2 t + \gamma (d_{it}\times t) + \epsilon_{it}$
 
 **Afterward, print the regression results by using the function summary(*ModelName*). An example of this can be found in the lecture slides 2023 FIRE298 Week 12 Part 2 Slide 5.**
 
 ```{r}
-
+summary(df2<-lm(PIC ~ Ban + harford, data=df))
 ```
 
 **Based on the regression, what is the value of** $\beta_0$ **? (1 point)**
 
-Answer:
+Answer: 0.039424
 
 **Based on the regression, what is the value of** $\beta_1$ **? (1 point)**
 
-Answer:
+Answer: -0.005048
 
 **Based on the regression, what is the impact of the treatment on the treatment group, relative to the control group, represented by** $\gamma$ **? (1 point)**
 
-Answer:
+Answer: 0.002332
 
 **Based on the regression, is the treatment effect statistically different from 0? (1 point)**
 
-Answer:
+Answer: No
 
 ### **Part 2. DiD with Fixed Effects**
 
 **Question 4: Run a DiD model with the treatment group** $d_i$**, treatment period** $t$**, its interaction** $d_{it} \times t$, **and all other** **numerical variables in your data to estimate the treatment effect. What does the regression table look like? (1 point)**
 
 ```{r}
-
+summary(df2<-lm(PIC ~ Ban + harford + Qs_tavg, data=df))
 ```
 
 **Question 5: Based on the regression in Question 4, what is the** **treatment effect? Is the treatment effect statistically different from 0? (2 points)**
