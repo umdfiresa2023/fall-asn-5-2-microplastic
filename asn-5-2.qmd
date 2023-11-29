@@ -36,16 +36,14 @@ df<-finaldf %>%
 
 Answer: September 19 2010, September 19, 2023
 
-```{r}
-
-```
+Feedback: The variable that represents the banned period is Ban. (1 point deduction)
 
 **Question 3: Run a DiD regression with the treatment group** $d_i$**, treatment period** $t$**, and its interaction** $d_{it} \times t$ **to estimate their impact on the outcome variable. This regression can be represent by the equation** $Y_{it}=\beta_0+\beta_1 d_i+\beta_2 t + \gamma (d_{it}\times t) + \epsilon_{it}$
 
 **Afterward, print the regression results by using the function summary(*ModelName*). An example of this can be found in the lecture slides 2023 FIRE298 Week 12 Part 2 Slide 5.**
 
 ```{r}
-summary(df2<-lm(PIC ~ Ban + harford, data=df))
+summary(model<-lm(PIC ~ Ban + harford, data=df))
 ```
 
 **Based on the regression, what is the value of** $\beta_0$ **? (1 point)**
@@ -69,16 +67,22 @@ Answer: No
 **Question 4: Run a DiD model with the treatment group** $d_i$**, treatment period** $t$**, its interaction** $d_{it} \times t$, **and all other** **numerical variables in your data to estimate the treatment effect. What does the regression table look like? (1 point)**
 
 ```{r}
-summary(df2<-lm(PIC ~ Ban + harford + Qs_tavg, data=df))
+summary(model2<-lm(PIC ~ Ban + harford + Qs_tavg, data=df))
+```
+
+Suggestion: Other numerical variables could have been included. I would suggest running the regression below instead. (0.5 point deduction)
+
+```{r}
+summary(model3<-lm(PIC ~ Ban + harford + 
+                     Qs_tavg + Evap_tavg + Qs_tavg + Rainf_f_tavg + Tair_f_tavg +
+                     Year, data=df))
 ```
 
 **Question 5: Based on the regression in Question 4, what is the** **treatment effect? Is the treatment effect statistically different from 0? (2 points)**
 
 Answer: The treatment effect is 0.038347. According to our output the treatment effect is statistically significant.
 
-```{r}
-
-```
+Feedback: This is not correct. 0.038347 is the intercept. The coefficient of interest is 0.002156. (1 point deduction)
 
 **Question 6: Run a DiD model the treatment group** $d_i$**, treatment period** $t$**, its interaction** $d_{it} \times t$, **and all other numerical, binary, and categorical variables. What does the regression table look like? (2 points)**
 
@@ -101,12 +105,27 @@ library("lfe")
 Write your model below and run it.
 
 ```{r}
-summary(df3<-felm(PIC ~ Ban + Tax + harford + Qs_tavg, data=df))
+summary(model4<-felm(PIC ~ Ban + Tax + harford + Qs_tavg, data=df))
+```
+
+Feedback: Your team did not include any categorical variable in the format suggested. I would suggest use Month and the county name as the categorical variable. Below is the suggested regression. (2 points deduction)
+
+```{r}
+summary(model5<-felm(PIC ~ Ban + Year +
+                     Evap_tavg + Qs_tavg + Rainf_f_tavg + Tair_f_tavg |
+                       Month + name, data=df))
+
+summary(model6<-felm(PIC ~ Ban + harford + Year +
+                     Evap_tavg + Qs_tavg + Rainf_f_tavg + Tair_f_tavg |
+                       Month + state, data=df))
+
 ```
 
 **Question 7: Based on the regression in Question 6, what is the** **treatment effect? Is the treatment effect statistically different from 0? (2 points)**
 
 Answer: The treatment effect is 0.039424. The treatment effect is statistically significant according to our output.
+
+Feedback: 0.039424 is the intercept. The treatment effect is 0.00232. (1 point deduction)
 
 **Question 8: Create more binary or categorical variables by multiplying binary variables or combining categorical variables together as you see fit. Explain what real-world factor each new variable represents. (2 points)**
 
